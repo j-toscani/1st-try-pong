@@ -7,6 +7,14 @@ html {
   box-sizing: inherit;
 }
 
-main {
+body {
   background: yellow;
+}
+section {
+  background: gray;
+  display: flex;
+}
+canvas {
+  border: solid 2px black;
+  margin: auto;
 }
