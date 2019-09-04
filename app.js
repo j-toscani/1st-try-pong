@@ -33,7 +33,7 @@ function drawBall() {
 
 // Paddle Variables
 let paddleHeight = 20;
-let paddleWidth = 100;
+let paddleWidth = 550;
 let paddleX = canvas.width / 2 - paddleWidth / 2;
 let paddleY = canvas.height - 70 + 15;
 let paddleSpeedY = 1;
