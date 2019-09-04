@@ -4,6 +4,7 @@ console.log("I am loaded!");
 
 const canvas = document.querySelector("#screen");
 const ctx = canvas.getContext("2d");
+let live = 1;
 
 // Ball Variables
 let ballHeight = 10;
@@ -13,16 +14,7 @@ let ballY = canvas.height - 70;
 let ballSpeedX = 2;
 let ballSpeedY = -2;
 
-// Paddle Variables
-let paddleHeight = 20;
-let paddleWidth = 100;
-let paddleX = canvas.width / 2 - paddleWidth / 2;
-let paddleY = canvas.height - 70 + 15;
-
-function drawPaddle() {
-  ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
-}
-
+//Ball Functions
 function drawBall() {
   ballX += ballSpeedX;
   ballY += ballSpeedY;
@@ -39,11 +31,34 @@ function drawBall() {
   }
 }
 
+// Paddle Variables
+let paddleHeight = 20;
+let paddleWidth = 100;
+let paddleX = canvas.width / 2 - paddleWidth / 2;
+let paddleY = canvas.height - 70 + 15;
+let paddleSpeedY = 1;
+
+// Paddle Functions
+function drawPaddle() {
+  ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
+}
+function movePaddleRight() {
+  paddleX += paddleSpeedY;
+}
+function movePaddleLeft() {
+  paddleX -= paddleSpeedY;
+}
+
+//Game function
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawPaddle();
   drawBall();
-  requestAnimationFrame(draw);
+  if (live > 0) {
+    requestAnimationFrame(draw);
+  } else {
+    alert("Game Over :(");
+  }
 }
 
 draw();
