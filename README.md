@@ -12,7 +12,7 @@ This is supposed to be a single player pongesque Game to try out canvas. I will 
 
 [X] Draw the Canvas that refreshes itself
 [X] Create a moving Ball that bounces off Walls
-[ ] Create a Pedal on the bottom of the screen the ball bounces off of.
+[X] Create a Pedal on the bottom of the screen the ball bounces off of.
 [ ] Make the Paddle moveable and keep bounce-property
 [ ] Create an End and a Start for the game by implementing lives and a Game-Over alert.
 [ ] To make it increasingly difficult, adjust the speed of the ball everytime it bounces off the paddle
