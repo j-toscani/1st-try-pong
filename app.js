@@ -4,8 +4,17 @@ console.log("I am loaded!");
 
 const canvas = document.querySelector("#screen");
 const ctx = canvas.getContext("2d");
-let life = 1;
+let life = 2;
 let score = 0;
+
+// adjust life and score display
+const lifeDisplay = document.querySelector("#lifes");
+const scoreDisplay = document.querySelector("#score");
+
+function createUserInfo() {
+  lifeDisplay.innerHTML = `You have ${life} lifes remaining.`;
+  scoreDisplay.innerHTML = `Score: ${score}`;
+}
 
 // Ball Variables
 let ballHeight = 10;
@@ -15,11 +24,17 @@ let ballY = canvas.height - 70;
 let ballSpeedX = 2;
 let ballSpeedY = -2;
 
+// loading images
+const ball = new Image();
+ball.src = "sprites/ball.jpg";
+const paddle = new Image();
+paddle.src = "sprites/paddle.jpg";
+
 //Ball Functions
 function drawBall() {
   ballX += ballSpeedX;
   ballY += ballSpeedY;
-  ctx.fillRect(ballX, ballY, ballWidth, ballHeight);
+  ctx.drawImage(ball, ballX, ballY, ballWidth, ballHeight);
   if (ballX >= canvas.width - ballWidth / 2 || ballX <= 0 - ballHeight / 2) {
     ballSpeedX = ballSpeedX * -1;
   }
@@ -27,17 +42,21 @@ function drawBall() {
     ballSpeedY = ballSpeedY * -1;
   }
   if (
-    ballY >= paddleY - ballHeight / 10 &&
-    ballY <= paddleY - ballHeight / 10 &&
+    ballY >= paddleY - ballHeight &&
+    ballY <= paddleY + paddleHeight + ballHeight &&
     (ballX >= paddleX && ballX <= paddleX + paddleWidth)
   ) {
     ballSpeedY = ballSpeedY * -1;
-    ballSpeedX = ballSpeedX * 1.5;
-    ballSpeedY = ballSpeedY * 1.5;
-    score = score++;
+    ballSpeedX = ballSpeedX * 1.25;
+    ballSpeedY = ballSpeedY * 1.25;
+    paddleSpeedY = paddleSpeedY * 1.2;
+    score = ++score;
   }
   if (ballY > canvas.height) {
     life = life - 1;
+    ballX = canvas.width / 2 - ballWidth / 2;
+    ballY = canvas.height - 70;
+    ballSpeedY = ballSpeedY * -1;
   }
 }
 
@@ -46,11 +65,11 @@ let paddleHeight = 20;
 let paddleWidth = 100;
 let paddleX = canvas.width / 2 - paddleWidth / 2;
 let paddleY = canvas.height - 70 + 15;
-let paddleSpeedY = 10;
+let paddleSpeedY = 15;
 
 // Paddle Functions
 function drawPaddle() {
-  ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
+  ctx.drawImage(paddle, paddleX, paddleY, paddleWidth, paddleHeight);
 }
 function movePaddleRight() {
   paddleX += paddleSpeedY;
@@ -74,14 +93,20 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawPaddle();
   drawBall();
+  createUserInfo();
   if (life > 0) {
     requestAnimationFrame(draw);
   } else {
+    // change alert to confirm to ask for restart.
+    // first, include storage
     if (score < 5) {
+      adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times... meh.`);
     } else if (score > 5 && score < 10) {
+      adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times. Well done!`);
-    } else if (score < 10) {
+    } else if (score >= 10) {
+      adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times. Shibedisheesh!`);
     }
   }
