@@ -108,7 +108,7 @@ function draw() {
     } else if (score > 5 && score < 10) {
       adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times. Well done!`);
-    } else if (score > 10) {
+    } else if (score >= 10) {
       adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times. Shibedisheesh!`);
     }
