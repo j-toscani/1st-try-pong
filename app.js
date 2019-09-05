@@ -49,8 +49,9 @@ function drawBall() {
     (ballX >= paddleX && ballX <= paddleX + paddleWidth)
   ) {
     ballSpeedY = ballSpeedY * -1;
-    ballSpeedX = ballSpeedX * 1.3;
-    ballSpeedY = ballSpeedY * 1.3;
+    ballSpeedX = ballSpeedX * 1.25;
+    ballSpeedY = ballSpeedY * 1.25;
+    paddleSpeedY = paddleSpeedY * 1.2;
     score = ++score;
   }
   if (ballY > canvas.height) {
@@ -107,7 +108,7 @@ function draw() {
     } else if (score > 5 && score < 10) {
       adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times. Well done!`);
-    } else if (score < 10) {
+    } else if (score > 10) {
       adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times. Shibedisheesh!`);
     }
