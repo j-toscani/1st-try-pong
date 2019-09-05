@@ -38,9 +38,8 @@ function drawBall() {
     (ballX >= paddleX && ballX <= paddleX + paddleWidth)
   ) {
     ballSpeedY = ballSpeedY * -1;
-    ballSpeedX = ballSpeedX * 1.5;
-    ballSpeedY = ballSpeedY * 1.5;
-    paddleSpeedY = paddleSpeedY * 1.1;
+    ballSpeedX = ballSpeedX * 1.3;
+    ballSpeedY = ballSpeedY * 1.3;
     score = ++score;
   }
   if (ballY > canvas.height) {
@@ -53,7 +52,7 @@ let paddleHeight = 20;
 let paddleWidth = 100;
 let paddleX = canvas.width / 2 - paddleWidth / 2;
 let paddleY = canvas.height - 70 + 15;
-let paddleSpeedY = 10;
+let paddleSpeedY = 15;
 
 // Paddle Functions
 function drawPaddle() {
