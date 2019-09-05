@@ -4,7 +4,8 @@ console.log("I am loaded!");
 
 const canvas = document.querySelector("#screen");
 const ctx = canvas.getContext("2d");
-let live = 1;
+let life = 1;
+let score = 0;
 
 // Ball Variables
 let ballHeight = 10;
@@ -31,8 +32,12 @@ function drawBall() {
     (ballX >= paddleX && ballX <= paddleX + paddleWidth)
   ) {
     ballSpeedY = ballSpeedY * -1;
-    ballSpeedX = ballSpeedX * 1.1;
-    ballSpeedY = ballSpeedY * 1.1;
+    ballSpeedX = ballSpeedX + 0.5;
+    ballSpeedY = ballSpeedY + 0.5;
+    score = score++;
+  }
+  if (ballY > canvas.height) {
+    life = life - 1;
   }
 }
 
@@ -69,10 +74,16 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawPaddle();
   drawBall();
-  if (live > 0) {
+  if (life > 0) {
     requestAnimationFrame(draw);
   } else {
-    alert("Game Over :(");
+    if (score < 5) {
+      alert(`Game Over :(. You hit the ball: ${score} times... meh.`);
+    } else if (score > 5 && score < 10) {
+      alert(`Game Over :(. You hit the ball: ${score} times. Well done!`);
+    } else if (score > 5 && score < 10) {
+      alert(`Game Over :(. You hit the ball: ${score} times. Shibedisheesh!`);
+    }
   }
 }
 
