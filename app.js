@@ -4,8 +4,19 @@ console.log("I am loaded!");
 
 const canvas = document.querySelector("#screen");
 const ctx = canvas.getContext("2d");
-let life = 1;
+let life = 2;
 let score = 0;
+
+// adjust life and score display
+const lifeDisplay = document.querySelector("#lifes");
+const scoreDisplay = document.querySelector("#score");
+
+function adjustLife() {
+  lifeDisplay.innerHTML = `You have ${life} lifes remaining.`;
+}
+function adjustScore() {
+  scoreDisplay.innerHTML = `Score: ${score}`;
+}
 
 // Ball Variables
 let ballHeight = 10;
@@ -33,8 +44,8 @@ function drawBall() {
     ballSpeedY = ballSpeedY * -1;
   }
   if (
-    ballY >= paddleY - ballHeight / 10 &&
-    ballY <= paddleY - ballHeight / 10 &&
+    ballY >= paddleY - ballHeight &&
+    ballY <= paddleY + paddleHeight + ballHeight &&
     (ballX >= paddleX && ballX <= paddleX + paddleWidth)
   ) {
     ballSpeedY = ballSpeedY * -1;
@@ -44,6 +55,9 @@ function drawBall() {
   }
   if (ballY > canvas.height) {
     life = life - 1;
+    ballX = canvas.width / 2 - ballWidth / 2;
+    ballY = canvas.height - 70;
+    ballSpeedY = ballSpeedY * -1;
   }
 }
 
@@ -80,14 +94,21 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawPaddle();
   drawBall();
+  adjustLife();
+  adjustScore();
   if (life > 0) {
     requestAnimationFrame(draw);
   } else {
+    // change alert to confirm to ask for restart.
+    // first, include storage
     if (score < 5) {
+      adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times... meh.`);
     } else if (score > 5 && score < 10) {
+      adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times. Well done!`);
     } else if (score < 10) {
+      adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times. Shibedisheesh!`);
     }
   }
