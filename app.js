@@ -11,10 +11,8 @@ let score = 0;
 const lifeDisplay = document.querySelector("#lifes");
 const scoreDisplay = document.querySelector("#score");
 
-function adjustLife() {
+function createUserInfo() {
   lifeDisplay.innerHTML = `You have ${life} lifes remaining.`;
-}
-function adjustScore() {
   scoreDisplay.innerHTML = `Score: ${score}`;
 }
 
@@ -95,8 +93,7 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawPaddle();
   drawBall();
-  adjustLife();
-  adjustScore();
+  createUserInfo();
   if (life > 0) {
     requestAnimationFrame(draw);
   } else {
