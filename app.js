@@ -15,11 +15,17 @@ let ballY = canvas.height - 70;
 let ballSpeedX = 2;
 let ballSpeedY = -2;
 
+// loading images
+const ball = new Image();
+ball.src = "sprites/ball.jpg";
+const paddle = new Image();
+paddle.src = "sprites/paddle.jpg";
+
 //Ball Functions
 function drawBall() {
   ballX += ballSpeedX;
   ballY += ballSpeedY;
-  ctx.fillRect(ballX, ballY, ballWidth, ballHeight);
+  ctx.drawImage(ball, ballX, ballY, ballWidth, ballHeight);
   if (ballX >= canvas.width - ballWidth / 2 || ballX <= 0 - ballHeight / 2) {
     ballSpeedX = ballSpeedX * -1;
   }
@@ -34,7 +40,7 @@ function drawBall() {
     ballSpeedY = ballSpeedY * -1;
     ballSpeedX = ballSpeedX * 1.5;
     ballSpeedY = ballSpeedY * 1.5;
-    score = score++;
+    score = ++score;
   }
   if (ballY > canvas.height) {
     life = life - 1;
@@ -50,7 +56,7 @@ let paddleSpeedY = 10;
 
 // Paddle Functions
 function drawPaddle() {
-  ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
+  ctx.drawImage(paddle, paddleX, paddleY, paddleWidth, paddleHeight);
 }
 function movePaddleRight() {
   paddleX += paddleSpeedY;
