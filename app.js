@@ -40,6 +40,7 @@ function drawBall() {
     ballSpeedY = ballSpeedY * -1;
     ballSpeedX = ballSpeedX * 1.5;
     ballSpeedY = ballSpeedY * 1.5;
+    paddleSpeedY = paddleSpeedY * 1.1;
     score = ++score;
   }
   if (ballY > canvas.height) {
