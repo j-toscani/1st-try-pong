@@ -22,21 +22,26 @@ function drawBall() {
   if (ballX >= canvas.width - ballWidth / 2 || ballX <= 0 - ballHeight / 2) {
     ballSpeedX = ballSpeedX * -1;
   }
+  if (ballY <= 0 - ballHeight / 2) {
+    ballSpeedY = ballSpeedY * -1;
+  }
   if (
-    ballY <= 0 + ballHeight / 2 ||
-    (ballY >= paddleY - ballHeight / 2 &&
-      (ballX >= paddleX && ballX <= paddleX + paddleWidth))
+    ballY >= paddleY - ballHeight / 10 &&
+    ballY <= paddleY - ballHeight / 10 &&
+    (ballX >= paddleX && ballX <= paddleX + paddleWidth)
   ) {
     ballSpeedY = ballSpeedY * -1;
+    ballSpeedX = ballSpeedX * 1.1;
+    ballSpeedY = ballSpeedY * 1.1;
   }
 }
 
 // Paddle Variables
 let paddleHeight = 20;
-let paddleWidth = 550;
+let paddleWidth = 100;
 let paddleX = canvas.width / 2 - paddleWidth / 2;
 let paddleY = canvas.height - 70 + 15;
-let paddleSpeedY = 1;
+let paddleSpeedY = 10;
 
 // Paddle Functions
 function drawPaddle() {
@@ -48,6 +53,16 @@ function movePaddleRight() {
 function movePaddleLeft() {
   paddleX -= paddleSpeedY;
 }
+//Paddle interaction
+// https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
+window.addEventListener("keydown", function(e) {
+  if (e.key === "ArrowRight") {
+    movePaddleRight();
+  }
+  if (e.key === "ArrowLeft") {
+    movePaddleLeft();
+  }
+});
 
 //Game function
 function draw() {
