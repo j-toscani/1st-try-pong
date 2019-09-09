@@ -100,13 +100,10 @@ function draw() {
     // change alert to confirm to ask for restart.
     // first, include storage
     if (score < 5) {
-      adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times... meh.`);
     } else if (score > 5 && score < 10) {
-      adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times. Well done!`);
     } else if (score >= 10) {
-      adjustLife();
       alert(`Game Over :(. You hit the ball: ${score} times. Shibedisheesh!`);
     }
   }
