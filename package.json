@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {},
   "devDependencies": {
+    "eslint": "^6.3.0",
     "sass": "^1.23.0-module.beta.1"
   },
   "scripts": {
