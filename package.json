@@ -8,6 +8,7 @@
     "sass": "^1.23.0-module.beta.1"
   },
   "scripts": {
+    "dev": "sass --watch input.scss style.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
