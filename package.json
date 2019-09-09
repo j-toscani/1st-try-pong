@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "This is supposed to be a single player pongesque Game to try out canvas. I will start with simple drawings and colision tests. The final Version should include:",
   "main": "app.js",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "sass": "^1.23.0-module.beta.1"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
