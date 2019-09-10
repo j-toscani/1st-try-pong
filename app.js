@@ -24,8 +24,8 @@ paddleImage.src = "./sprites/paddle.jpg";
 
 // Ball Variables
 const ball = {
-  Height: 10,
-  Width: 10,
+  height: 10,
+  width: 10,
   X: canvas.width / 2,
   Y: canvas.height - 70,
   SpeedX: 2,
@@ -33,55 +33,77 @@ const ball = {
   Image: ballImage
 };
 
-ball.X = ball.X - ball.Width / 2;
+ball.X = ball.X - ball.width / 2;
+
+//Collision detection
+
+function detectCollisionWallRight(object) {
+  return object.X >= canvas.width - object.width;
+}
+function detectCollisionWallLeft(object) {
+  return object.X <= 0;
+}
+function detectCollisionWallTop(object) {
+  return object.Y <= 0;
+}
+function detectCollisionWallBottom(object) {
+  return object.Y > canvas.height;
+}
+function detectCollisionBetween(firstObject, secondObject) {
+  return (
+    firstObject.Y >= secondObject.Y - firstObject.height &&
+    firstObject.Y <= secondObject.Y + secondObject.height &&
+    (firstObject.X + firstObject.width >= secondObject.X &&
+      firstObject.X <= secondObject.X + secondObject.width)
+  );
+}
 
 //Ball Functions
 function drawBall() {
   ball.X += ball.SpeedX;
   ball.Y += ball.SpeedY;
-  ctx.drawImage(ballImage, ball.X, ball.Y, ball.Width, ball.Height);
-  if (
-    ball.X >= canvas.width - ball.Width / 2 ||
-    ball.X <= 0 - ball.Height / 2
-  ) {
+  ctx.drawImage(ballImage, ball.X, ball.Y, ball.width, ball.height);
+  if (detectCollisionWallLeft(ball) || detectCollisionWallRight(ball)) {
     ball.SpeedX = ball.SpeedX * -1;
   }
-  if (ball.Y <= 0 - ball.Height / 2) {
+  if (detectCollisionWallTop(ball)) {
     ball.SpeedY = ball.SpeedY * -1;
   }
-  if (
-    ball.Y >= paddle.Y - ball.Height &&
-    ball.Y <= paddle.Y + paddle.Height + ball.Height &&
-    (ball.X >= paddle.X && ball.X <= paddle.X + paddle.Width)
-  ) {
+  if (detectCollisionBetween(ball, paddle)) {
     ball.SpeedY = ball.SpeedY * -1;
     ball.SpeedX = ball.SpeedX * 1.25;
     ball.SpeedY = ball.SpeedY * 1.25;
     paddle.SpeedY = paddle.SpeedY * 1.2;
     score = ++score;
   }
-  if (ball.Y > canvas.height) {
+  if (detectCollisionWallBottom(ball)) {
     life = life - 1;
-    ball.X = canvas.width / 2 - ball.Width / 2;
+    ball.X = canvas.width / 2 - ball.width / 2;
     ball.Y = canvas.height - 70;
     ball.SpeedY = ball.SpeedY * -1;
   }
 }
 
 const paddle = {
-  Height: 20,
-  Width: 100,
+  height: 20,
+  width: 100,
   X: canvas.width / 2,
   Y: canvas.height - 70 + 15,
   SpeedY: 15,
   Image: paddleImage
 };
 
-paddle.X = paddle.X - paddle.Width / 2;
+paddle.X = paddle.X - paddle.width / 2;
 
 // Paddle Functions
 function drawPaddle() {
-  ctx.drawImage(paddleImage, paddle.X, paddle.Y, paddle.Width, paddle.Height);
+  ctx.drawImage(paddleImage, paddle.X, paddle.Y, paddle.width, paddle.height);
+  if (detectCollisionWallLeft(paddle)) {
+    paddle.X = 0;
+  }
+  if (detectCollisionWallRight(paddle)) {
+    paddle.X = canvas.width - paddle.width;
+  }
 }
 function movePaddleRight() {
   paddle.X += paddle.SpeedY;
