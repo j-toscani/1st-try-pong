@@ -17,65 +17,84 @@ function createUserInfo() {
 }
 
 // Ball Variables
-let ballHeight = 10;
-let ballWidth = 10;
-let ballX = canvas.width / 2 - ballWidth / 2;
-let ballY = canvas.height - 70;
-let ballSpeedX = 2;
-let ballSpeedY = -2;
+const ball = {
+  Height: 10,
+  Width: 10,
+  X: canvas.width / 2,
+  Y: canvas.height - 70,
+  SpeedX: 2,
+  SpeedY: -2,
+  Image: "./sprites/paddle.jpg"
+};
+
+ball.X = ball.X - ball.Width / 2;
 
 // loading images
-const ball = new Image();
-ball.src = "sprites/ball.jpg";
-const paddle = new Image();
-paddle.src = "sprites/paddle.jpg";
+const ballImage = new Image();
+ballImage.src = "sprites/ball.jpg";
+const paddleImage = new Image();
+paddleImage.src = "./sprites/paddle.jpg";
 
 //Ball Functions
 function drawBall() {
-  ballX += ballSpeedX;
-  ballY += ballSpeedY;
-  ctx.drawImage(ball, ballX, ballY, ballWidth, ballHeight);
-  if (ballX >= canvas.width - ballWidth / 2 || ballX <= 0 - ballHeight / 2) {
-    ballSpeedX = ballSpeedX * -1;
+  ball.X += ball.SpeedX;
+  ball.Y += ball.SpeedY;
+  ctx.drawImage(ballImage, ball.X, ball.Y, ball.Width, ball.Height);
+  if (
+    ball.X >= canvas.width - ball.Width / 2 ||
+    ball.X <= 0 - ball.Height / 2
+  ) {
+    ball.SpeedX = ball.SpeedX * -1;
   }
-  if (ballY <= 0 - ballHeight / 2) {
-    ballSpeedY = ballSpeedY * -1;
+  if (ball.Y <= 0 - ball.Height / 2) {
+    ball.SpeedY = ball.SpeedY * -1;
   }
   if (
-    ballY >= paddleY - ballHeight &&
-    ballY <= paddleY + paddleHeight + ballHeight &&
-    (ballX >= paddleX && ballX <= paddleX + paddleWidth)
+    ball.Y >= paddle.Y - ball.Height &&
+    ball.Y <= paddle.Y + paddle.Height + ball.Height &&
+    (ball.X >= paddle.X && ball.X <= paddle.X + paddle.Width)
   ) {
-    ballSpeedY = ballSpeedY * -1;
-    ballSpeedX = ballSpeedX * 1.25;
-    ballSpeedY = ballSpeedY * 1.25;
-    paddleSpeedY = paddleSpeedY * 1.2;
+    ball.SpeedY = ball.SpeedY * -1;
+    ball.SpeedX = ball.SpeedX * 1.25;
+    ball.SpeedY = ball.SpeedY * 1.25;
+    paddle.SpeedY = paddle.SpeedY * 1.2;
     score = ++score;
   }
-  if (ballY > canvas.height) {
+  if (ball.Y > canvas.height) {
     life = life - 1;
-    ballX = canvas.width / 2 - ballWidth / 2;
-    ballY = canvas.height - 70;
-    ballSpeedY = ballSpeedY * -1;
+    ball.X = canvas.width / 2 - ball.Width / 2;
+    ball.Y = canvas.height - 70;
+    ball.SpeedY = ball.SpeedY * -1;
   }
 }
 
 // Paddle Variables
-let paddleHeight = 20;
-let paddleWidth = 100;
-let paddleX = canvas.width / 2 - paddleWidth / 2;
-let paddleY = canvas.height - 70 + 15;
-let paddleSpeedY = 15;
+// let paddle.Height = 20;
+// let paddleWidth = 100;
+// let paddleX = canvas.width / 2 - paddle.Width / 2;
+// let paddleY = canvas.height - 70 + 15;
+// let paddleSpeedY = 15;
+
+const paddle = {
+  Height: 20,
+  Width: 100,
+  X: canvas.width / 2,
+  Y: canvas.height - 70 + 15,
+  SpeedY: 15,
+  Image: "./sprites/paddle.jpg"
+};
+
+paddle.X = paddle.X - paddle.Width / 2;
 
 // Paddle Functions
 function drawPaddle() {
-  ctx.drawImage(paddle, paddleX, paddleY, paddleWidth, paddleHeight);
+  ctx.drawImage(paddleImage, paddle.X, paddle.Y, paddle.Width, paddle.Height);
 }
 function movePaddleRight() {
-  paddleX += paddleSpeedY;
+  paddle.X += paddle.SpeedY;
 }
 function movePaddleLeft() {
-  paddleX -= paddleSpeedY;
+  paddle.X -= paddle.SpeedY;
 }
 //Paddle interaction
 // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
@@ -100,7 +119,7 @@ function draw() {
     // change alert to confirm to ask for restart.
     // first, include storage
     if (score < 5) {
-      alert(`Game Over :(. You hit the ball: ${score} times... meh.`);
+      alert(`Game Over :(. You hit the ball.: ${score} times... meh.`);
     } else if (score > 5 && score < 10) {
       alert(`Game Over :(. You hit the ball: ${score} times. Well done!`);
     } else if (score >= 10) {
