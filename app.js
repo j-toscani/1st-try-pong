@@ -16,6 +16,12 @@ function createUserInfo() {
   scoreDisplay.innerHTML = `Score: ${score}`;
 }
 
+// loading images
+const ballImage = new Image();
+ballImage.src = "sprites/ball.jpg";
+const paddleImage = new Image();
+paddleImage.src = "./sprites/paddle.jpg";
+
 // Ball Variables
 const ball = {
   Height: 10,
@@ -24,16 +30,10 @@ const ball = {
   Y: canvas.height - 70,
   SpeedX: 2,
   SpeedY: -2,
-  Image: "./sprites/paddle.jpg"
+  Image: ballImage
 };
 
 ball.X = ball.X - ball.Width / 2;
-
-// loading images
-const ballImage = new Image();
-ballImage.src = "sprites/ball.jpg";
-const paddleImage = new Image();
-paddleImage.src = "./sprites/paddle.jpg";
 
 //Ball Functions
 function drawBall() {
@@ -68,20 +68,13 @@ function drawBall() {
   }
 }
 
-// Paddle Variables
-// let paddle.Height = 20;
-// let paddleWidth = 100;
-// let paddleX = canvas.width / 2 - paddle.Width / 2;
-// let paddleY = canvas.height - 70 + 15;
-// let paddleSpeedY = 15;
-
 const paddle = {
   Height: 20,
   Width: 100,
   X: canvas.width / 2,
   Y: canvas.height - 70 + 15,
   SpeedY: 15,
-  Image: "./sprites/paddle.jpg"
+  Image: paddleImage
 };
 
 paddle.X = paddle.X - paddle.Width / 2;
