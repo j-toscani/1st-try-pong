@@ -32,8 +32,27 @@ const ball = {
   SpeedY: -2,
   Image: ballImage
 };
-
 ball.X = ball.X - ball.width / 2;
+// Paddle Variables
+const paddle = {
+  height: 20,
+  width: 100,
+  X: canvas.width / 2,
+  Y: canvas.height - 70 + 15,
+  SpeedY: 15,
+  Image: paddleImage
+};
+paddle.X = paddle.X - paddle.width / 2;
+// Obstacle Variables (for testing)
+const obstacle = {
+  height: 100,
+  width: 100,
+  X: canvas.width / 2,
+  Y: canvas.height / 2
+};
+
+obstacle.X = obstacle.X - obstacle.height / 2;
+obstacle.Y = obstacle.Y - obstacle.width / 2;
 
 //Collision detection
 
@@ -84,17 +103,6 @@ function drawBall() {
   }
 }
 
-const paddle = {
-  height: 20,
-  width: 100,
-  X: canvas.width / 2,
-  Y: canvas.height - 70 + 15,
-  SpeedY: 15,
-  Image: paddleImage
-};
-
-paddle.X = paddle.X - paddle.width / 2;
-
 // Paddle Functions
 function drawPaddle() {
   ctx.drawImage(paddleImage, paddle.X, paddle.Y, paddle.width, paddle.height);
@@ -122,11 +130,42 @@ window.addEventListener("keydown", function(e) {
   }
 });
 
+function obstacleCollision() {}
+function drawObstacle() {
+  ctx.fillRect(obstacle.X, obstacle.Y, obstacle.width, obstacle.height);
+  const collision = detectCollisionBetween(ball, obstacle);
+  if (collision) {
+    ball.SpeedX = 0;
+    ball.SpeedY = 0;
+    // if (
+    //   ball.X > obstacle.X &&
+    //   ball.X < obstacle.X + obstacle.width &&
+    //   ball.SpeedX > 0
+    // ) {
+    //   ball.SpeedX *= -1;
+    // } else if (
+    //   ball.Y > obstacle.Y &&
+    //   ball.Y < obstacle.Y + obstacle.height &&
+    //   ball.SpeedY > 0
+    // ) {
+    //   ball.SpeedY *= -1;
+    // } else if (
+    //   ball.X > obstacle.X &&
+    //   ball.X < obstacle.X + obstacle.width &&
+    //   ball.SpeedX < 0
+    // ) {
+    //   ball.SpeedX *= -1;
+    // } else if (ball.Y < obstacle.Y - ball.height && ball.SpeedY < 0) {
+    //   ball.SpeedY *= -1;
+    // }
+  }
+}
 //Game function
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawPaddle();
   drawBall();
+  drawObstacle();
   createUserInfo();
   if (life > 0) {
     requestAnimationFrame(draw);
