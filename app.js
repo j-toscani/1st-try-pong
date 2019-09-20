@@ -122,10 +122,10 @@ function movePaddleLeft() {
 //Paddle interaction
 // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
 window.addEventListener("keydown", function(e) {
-  if (e.key === "ArrowRight") {
+  if (e.key === "ArrowRight" && paddle.X < canvas.width) {
     movePaddleRight();
   }
-  if (e.key === "ArrowLeft") {
+  if (e.key === "ArrowLeft" && paddle.X > 0) {
     movePaddleLeft();
   }
 });
@@ -135,29 +135,27 @@ function drawObstacle() {
   ctx.fillRect(obstacle.X, obstacle.Y, obstacle.width, obstacle.height);
   const collision = detectCollisionBetween(ball, obstacle);
   if (collision) {
-    ball.SpeedX = 0;
-    ball.SpeedY = 0;
-    // if (
-    //   ball.X > obstacle.X &&
-    //   ball.X < obstacle.X + obstacle.width &&
-    //   ball.SpeedX > 0
-    // ) {
-    //   ball.SpeedX *= -1;
-    // } else if (
-    //   ball.Y > obstacle.Y &&
-    //   ball.Y < obstacle.Y + obstacle.height &&
-    //   ball.SpeedY > 0
-    // ) {
-    //   ball.SpeedY *= -1;
-    // } else if (
-    //   ball.X > obstacle.X &&
-    //   ball.X < obstacle.X + obstacle.width &&
-    //   ball.SpeedX < 0
-    // ) {
-    //   ball.SpeedX *= -1;
-    // } else if (ball.Y < obstacle.Y - ball.height && ball.SpeedY < 0) {
-    //   ball.SpeedY *= -1;
-    // }
+    if (
+      ball.X > obstacle.X &&
+      ball.X < obstacle.X + obstacle.width &&
+      ball.SpeedX > 0
+    ) {
+      ball.SpeedX *= -1;
+    } else if (
+      ball.Y > obstacle.Y &&
+      ball.Y < obstacle.Y + obstacle.height &&
+      ball.SpeedY > 0
+    ) {
+      ball.SpeedY *= -1;
+    } else if (
+      ball.X > obstacle.X &&
+      ball.X < obstacle.X + obstacle.width &&
+      ball.SpeedX < 0
+    ) {
+      ball.SpeedX *= -1;
+    } else if (ball.Y < obstacle.Y - ball.height && ball.SpeedY < 0) {
+      ball.SpeedY *= -1;
+    }
   }
 }
 //Game function
