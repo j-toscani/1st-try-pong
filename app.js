@@ -1,11 +1,10 @@
+// Global functions and properties
 "use strict";
 
 console.log("I am loaded!");
 
 const canvas = document.querySelector("#screen");
 const ctx = canvas.getContext("2d");
-let life = 2;
-let score = 0;
 
 // adjust life and score display
 const lifeDisplay = document.querySelector("#lifes");
@@ -21,6 +20,50 @@ const ballImage = new Image();
 ballImage.src = "sprites/ball.jpg";
 const paddleImage = new Image();
 paddleImage.src = "./sprites/paddle.jpg";
+
+//Collision detection
+
+function detectCollisionWallRight(object) {
+  return object.X >= canvas.width - object.width;
+}
+function detectCollisionWallLeft(object) {
+  return object.X <= 0;
+}
+function detectCollisionWallTop(object) {
+  return object.Y <= 0;
+}
+function detectCollisionWallBottom(object) {
+  return object.Y > canvas.height;
+}
+function detectCollisionBetween(firstObject, secondObject) {
+  return (
+    firstObject.Y >= secondObject.Y - firstObject.height &&
+    firstObject.Y <= secondObject.Y + secondObject.height &&
+    (firstObject.X + firstObject.width >= secondObject.X &&
+      firstObject.X <= secondObject.X + secondObject.width)
+  );
+}
+
+function consequenceAfterCollisionWithSquare(square) {
+  const ballDistanceToSquareCenter = {
+    X: Math.abs(square.X + square.width / 2 - (ball.X + ball.width / 2)),
+    Y: Math.abs(square.Y + square.height / 2 - (ball.Y + ball.height / 2))
+  };
+  const hitFromLeftOrRight =
+    ballDistanceToSquareCenter.X > ballDistanceToSquareCenter.Y;
+  const hitFromTopOrBottom = !hitFromLeftOrRight;
+
+  if (hitFromLeftOrRight) {
+    ball.SpeedX *= -1;
+  } else if (hitFromTopOrBottom) {
+    ball.SpeedY *= -1;
+  }
+}
+
+// Level functions and variables
+
+let life = 2;
+let score = 0;
 
 // Ball Variables
 const ball = {
@@ -53,29 +96,6 @@ const obstacle = {
 
 obstacle.X = obstacle.X - obstacle.height / 2;
 obstacle.Y = obstacle.Y - obstacle.width / 2;
-
-//Collision detection
-
-function detectCollisionWallRight(object) {
-  return object.X >= canvas.width - object.width;
-}
-function detectCollisionWallLeft(object) {
-  return object.X <= 0;
-}
-function detectCollisionWallTop(object) {
-  return object.Y <= 0;
-}
-function detectCollisionWallBottom(object) {
-  return object.Y > canvas.height;
-}
-function detectCollisionBetween(firstObject, secondObject) {
-  return (
-    firstObject.Y >= secondObject.Y - firstObject.height &&
-    firstObject.Y <= secondObject.Y + secondObject.height &&
-    (firstObject.X + firstObject.width >= secondObject.X &&
-      firstObject.X <= secondObject.X + secondObject.width)
-  );
-}
 
 //Ball Functions
 function drawBall() {
@@ -130,32 +150,11 @@ window.addEventListener("keydown", function(e) {
   }
 });
 
-function obstacleCollision() {}
-function drawObstacle() {
-  ctx.fillRect(obstacle.X, obstacle.Y, obstacle.width, obstacle.height);
-  const collision = detectCollisionBetween(ball, obstacle);
+function drawObstacle(object) {
+  ctx.fillRect(object.X, object.Y, object.width, object.height);
+  const collision = detectCollisionBetween(ball, object);
   if (collision) {
-    if (
-      ball.X > obstacle.X &&
-      ball.X < obstacle.X + obstacle.width &&
-      ball.SpeedX > 0
-    ) {
-      ball.SpeedX *= -1;
-    } else if (
-      ball.Y > obstacle.Y &&
-      ball.Y < obstacle.Y + obstacle.height &&
-      ball.SpeedY > 0
-    ) {
-      ball.SpeedY *= -1;
-    } else if (
-      ball.X > obstacle.X &&
-      ball.X < obstacle.X + obstacle.width &&
-      ball.SpeedX < 0
-    ) {
-      ball.SpeedX *= -1;
-    } else if (ball.Y < obstacle.Y - ball.height && ball.SpeedY < 0) {
-      ball.SpeedY *= -1;
-    }
+    consequenceAfterCollisionWithSquare(object);
   }
 }
 //Game function
@@ -163,7 +162,7 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawPaddle();
   drawBall();
-  drawObstacle();
+  drawObstacle(obstacle);
   createUserInfo();
   if (life > 0) {
     requestAnimationFrame(draw);
@@ -181,3 +180,37 @@ function draw() {
 }
 
 draw();
+drawObstacle();
+
+// if (collision) {
+//   if (
+//     ball.X > obstacle.X &&
+//     ball.X < obstacle.X + obstacle.width &&
+//     ball.SpeedX > 0
+//   ) {
+//     ball.SpeedX *= -1;
+//   } else if (
+//     ball.Y > obstacle.Y &&
+//     ball.Y < obstacle.Y + obstacle.height &&
+//     ball.SpeedY > 0
+//   ) {
+//     ball.SpeedY *= -1;
+//   } else if (
+//     ball.X > obstacle.X &&
+//     ball.X < obstacle.X + obstacle.width &&
+//     ball.SpeedX < 0
+//   ) {
+//     ball.SpeedX *= -1;
+//   } else if (ball.Y < obstacle.Y - ball.height && ball.SpeedY < 0) {
+//     ball.SpeedY *= -1;
+//   }
+// }
+
+// Only for debugging purpose
+// const hitFromLeft = hitFromLeftOrRight && ball.SpeedX < 0;
+// const hitFromRight = hitFromLeftOrRight && ball.SpeedX > 0;
+// const hitFromTop = hitFromTopOrBottom && ball.SpeedY < 0;
+// const hitFromBottom = hitFromTopOrBottom && ball.SpeedY > 0;
+// console.log(
+//   `hitFromLeft: ${hitFromLeft}, hitFromRight: ${hitFromRight}, hitFromTop: ${hitFromTop}, hitFromBottom: ${hitFromBottom}`
+// );
