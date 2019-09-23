@@ -18,8 +18,10 @@ function createUserInfo() {
 // loading images
 const ballImage = new Image();
 ballImage.src = "sprites/ball.jpg";
-const paddleImage = new Image();
-paddleImage.src = "./sprites/paddle.jpg";
+const paddleImageP1 = new Image();
+paddleImageP1.src = "./sprites/paddle.jpg";
+const paddleImageP2 = new Image();
+paddleImageP2.src = "./sprites/paddle.jpg";
 
 //Collision detection
 
@@ -77,15 +79,26 @@ const ball = {
 };
 ball.X = ball.X - ball.width / 2;
 // Paddle Variables
-const paddle = {
+const paddleP1 = {
+  height: 20,
+  width: 100,
+  X: canvas.width / 2,
+  Y: 70 - 15,
+  SpeedY: 15,
+  Image: paddleImageP1
+};
+paddleP1.X = paddleP1.X - paddleP1.width / 2;
+
+// Paddle Variables
+const paddleP2 = {
   height: 20,
   width: 100,
   X: canvas.width / 2,
   Y: canvas.height - 70 + 15,
   SpeedY: 15,
-  Image: paddleImage
+  Image: paddleImageP2
 };
-paddle.X = paddle.X - paddle.width / 2;
+paddleP2.X = paddleP2.X - paddleP2.width / 2;
 // Obstacle Variables (for testing)
 const obstacle = {
   height: 100,
@@ -108,11 +121,18 @@ function drawBall() {
   if (detectCollisionWallTop(ball)) {
     ball.SpeedY = ball.SpeedY * -1;
   }
-  if (detectCollisionBetween(ball, paddle)) {
+  if (detectCollisionBetween(ball, paddleP1)) {
     ball.SpeedY = ball.SpeedY * -1;
     ball.SpeedX = ball.SpeedX * 1.25;
     ball.SpeedY = ball.SpeedY * 1.25;
-    paddle.SpeedY = paddle.SpeedY * 1.2;
+    paddleP1.SpeedY = paddleP1.SpeedY * 1.2;
+    score = ++score;
+  }
+  if (detectCollisionBetween(ball, paddleP2)) {
+    ball.SpeedY = ball.SpeedY * -1;
+    ball.SpeedX = ball.SpeedX * 1.25;
+    ball.SpeedY = ball.SpeedY * 1.25;
+    paddleP2.SpeedY = paddleP2.SpeedY * 1.2;
     score = ++score;
   }
   if (detectCollisionWallBottom(ball)) {
@@ -124,29 +144,67 @@ function drawBall() {
 }
 
 // Paddle Functions
-function drawPaddle() {
-  ctx.drawImage(paddleImage, paddle.X, paddle.Y, paddle.width, paddle.height);
-  if (detectCollisionWallLeft(paddle)) {
-    paddle.X = 0;
+function drawPaddleP1() {
+  ctx.drawImage(
+    paddleImageP1,
+    paddleP1.X,
+    paddleP1.Y,
+    paddleP1.width,
+    paddleP1.height
+  );
+  if (detectCollisionWallLeft(paddleP1)) {
+    paddleP1.X = 0;
   }
-  if (detectCollisionWallRight(paddle)) {
-    paddle.X = canvas.width - paddle.width;
+  if (detectCollisionWallRight(paddleP1)) {
+    paddleP1.X = canvas.width - paddleP1.width;
   }
 }
-function movePaddleRight() {
-  paddle.X += paddle.SpeedY;
+function movePaddelRightP1() {
+  paddleP1.X += paddleP1.SpeedY;
 }
-function movePaddleLeft() {
-  paddle.X -= paddle.SpeedY;
+function movePaddleLeftP1() {
+  paddleP1.X -= paddleP1.SpeedY;
 }
 //Paddle interaction
 // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
 window.addEventListener("keydown", function(e) {
-  if (e.key === "ArrowRight" && paddle.X < canvas.width) {
-    movePaddleRight();
+  if (e.key === "ArrowRight" && paddleP1.X < canvas.width) {
+    movePaddelRightP1();
   }
-  if (e.key === "ArrowLeft" && paddle.X > 0) {
-    movePaddleLeft();
+  if (e.key === "ArrowLeft" && paddleP1.X > 0) {
+    movePaddleLeftP1();
+  }
+});
+
+function drawPaddleP2() {
+  ctx.drawImage(
+    paddleImageP2,
+    paddleP2.X,
+    paddleP2.Y,
+    paddleP2.width,
+    paddleP2.height
+  );
+  if (detectCollisionWallLeft(paddleP2)) {
+    paddleP2.X = 0;
+  }
+  if (detectCollisionWallRight(paddleP2)) {
+    paddleP2.X = canvas.width - paddleP2.width;
+  }
+}
+function movePaddelRightP2() {
+  paddleP2.X += paddleP2.SpeedY;
+}
+function movePaddleLeftP2() {
+  paddleP2.X -= paddleP2.SpeedY;
+}
+//Paddle interaction
+// https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
+window.addEventListener("keydown", function(e) {
+  if (e.key === "a" && paddleP2.X < canvas.width) {
+    movePaddelRightP2();
+  }
+  if (e.key === "d" && paddleP2.X > 0) {
+    movePaddleLeftP2();
   }
 });
 
@@ -160,7 +218,8 @@ function drawObstacle(object) {
 //Game function
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawPaddle();
+  drawPaddleP1();
+  drawPaddleP2();
   drawBall();
   drawObstacle(obstacle);
   createUserInfo();
