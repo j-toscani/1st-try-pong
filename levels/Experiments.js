@@ -20,6 +20,8 @@ const ballImage = new Image();
 ballImage.src = "sprites/ball.jpg";
 const paddleImageP1 = new Image();
 paddleImageP1.src = "./sprites/paddle.jpg";
+const paddleImageP2 = new Image();
+paddleImageP2.src = "./sprites/paddle.jpg";
 
 //Collision detection
 
@@ -76,18 +78,27 @@ const ball = {
   Image: ballImage
 };
 ball.X = ball.X - ball.width / 2;
-
 // Paddle Variables
 const paddleP1 = {
   height: 20,
   width: 100,
   X: canvas.width / 2,
-  Y: canvas.height - 70 + 15,
+  Y: 70 - 15,
   SpeedY: 15,
   Image: paddleImageP1
 };
 paddleP1.X = paddleP1.X - paddleP1.width / 2;
 
+// Paddle Variables
+const paddleP2 = {
+  height: 20,
+  width: 100,
+  X: canvas.width / 2,
+  Y: canvas.height - 70 + 15,
+  SpeedY: 15,
+  Image: paddleImageP2
+};
+paddleP2.X = paddleP2.X - paddleP2.width / 2;
 // Obstacle Variables (for testing)
 const obstacle = {
   height: 100,
@@ -115,6 +126,13 @@ function drawBall() {
     ball.SpeedX = ball.SpeedX * 1.25;
     ball.SpeedY = ball.SpeedY * 1.25;
     paddleP1.SpeedY = paddleP1.SpeedY * 1.2;
+    score = ++score;
+  }
+  if (detectCollisionBetween(ball, paddleP2)) {
+    ball.SpeedY = ball.SpeedY * -1;
+    ball.SpeedX = ball.SpeedX * 1.25;
+    ball.SpeedY = ball.SpeedY * 1.25;
+    paddleP2.SpeedY = paddleP2.SpeedY * 1.2;
     score = ++score;
   }
   if (detectCollisionWallBottom(ball)) {
@@ -158,6 +176,38 @@ window.addEventListener("keydown", function(e) {
   }
 });
 
+function drawPaddleP2() {
+  ctx.drawImage(
+    paddleImageP2,
+    paddleP2.X,
+    paddleP2.Y,
+    paddleP2.width,
+    paddleP2.height
+  );
+  if (detectCollisionWallLeft(paddleP2)) {
+    paddleP2.X = 0;
+  }
+  if (detectCollisionWallRight(paddleP2)) {
+    paddleP2.X = canvas.width - paddleP2.width;
+  }
+}
+function movePaddelRightP2() {
+  paddleP2.X += paddleP2.SpeedY;
+}
+function movePaddleLeftP2() {
+  paddleP2.X -= paddleP2.SpeedY;
+}
+//Paddle interaction
+// https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
+window.addEventListener("keydown", function(e) {
+  if (e.key === "a" && paddleP2.X < canvas.width) {
+    movePaddelRightP2();
+  }
+  if (e.key === "d" && paddleP2.X > 0) {
+    movePaddleLeftP2();
+  }
+});
+
 function drawObstacle(object) {
   ctx.fillRect(object.X, object.Y, object.width, object.height);
   const collision = detectCollisionBetween(ball, object);
@@ -166,17 +216,18 @@ function drawObstacle(object) {
   }
 }
 //Game function
-export function drawLevel02() {
+function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawPaddleP1();
+  drawPaddleP2();
   drawBall();
   drawObstacle(obstacle);
   createUserInfo();
-  if (life > 0 && score < 10) {
-    requestAnimationFrame(drawLevel02);
-  } else if (life > 0 && score === 10) {
-    level += 1;
-  } else if (life === 0) {
+  if (life > 0) {
+    requestAnimationFrame(draw);
+  } else {
+    // change alert to confirm to ask for restart.
+    // first, include storage
     if (score < 5) {
       alert(`Game Over :(. You hit the ball.: ${score} times... meh.`);
     } else if (score > 5 && score < 10) {
@@ -186,3 +237,6 @@ export function drawLevel02() {
     }
   }
 }
+
+draw();
+drawObstacle();
