@@ -73,8 +73,8 @@ const ball = {
   width: 10,
   X: canvas.width / 2,
   Y: canvas.height - 70,
-  SpeedX: 2,
-  SpeedY: -2,
+  SpeedX: 3,
+  SpeedY: -3,
   Image: ballImage
 };
 ball.X = ball.X - ball.width / 2;
@@ -85,7 +85,7 @@ const paddleP1 = {
   width: 100,
   X: canvas.width / 2,
   Y: canvas.height - 70 + 15,
-  SpeedY: 15,
+  SpeedY: 25,
   Image: paddleImageP1
 };
 paddleP1.X = paddleP1.X - paddleP1.width / 2;
@@ -114,9 +114,9 @@ function drawBall() {
   }
   if (detectCollisionBetween(ball, paddleP1)) {
     ball.SpeedY = ball.SpeedY * -1;
-    ball.SpeedX = ball.SpeedX * 1.25;
-    ball.SpeedY = ball.SpeedY * 1.25;
-    paddleP1.SpeedY = paddleP1.SpeedY * 1.2;
+    ball.SpeedX = ball.SpeedX * 1.15;
+    ball.SpeedY = ball.SpeedY * 1.15;
+    paddleP1.SpeedY = paddleP1.SpeedY * 1.15;
     score = ++score;
   }
   if (detectCollisionWallBottom(ball)) {
@@ -176,6 +176,7 @@ export function drawLevel01() {
   if (life > 0 && score < 10) {
     requestAnimationFrame(drawLevel01);
   } else if (life > 0 && score === 10) {
+    alert(`New Level unlocked!!!`);
     setNewLevel();
   } else if (life === 0) {
     if (score < 5) {
