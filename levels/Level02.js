@@ -1,6 +1,8 @@
 // Global functions and properties
 "use strict";
 
+import { setNewLevel } from "../app.js";
+
 console.log("I am loaded!");
 
 const canvas = document.querySelector("#screen");
@@ -90,8 +92,8 @@ paddleP1.X = paddleP1.X - paddleP1.width / 2;
 
 // Obstacle Variables (for testing)
 const obstacle = {
-  height: 100,
-  width: 100,
+  height: 80,
+  width: 80,
   X: canvas.width / 2,
   Y: canvas.height / 2
 };
@@ -105,23 +107,28 @@ function drawBall() {
   ball.Y += ball.SpeedY;
   ctx.drawImage(ballImage, ball.X, ball.Y, ball.width, ball.height);
   if (detectCollisionWallLeft(ball) || detectCollisionWallRight(ball)) {
-    ball.SpeedX = ball.SpeedX * -1;
+    ball.SpeedX *= -1;
   }
   if (detectCollisionWallTop(ball)) {
-    ball.SpeedY = ball.SpeedY * -1;
+    ball.SpeedY *= -1;
   }
   if (detectCollisionBetween(ball, paddleP1)) {
-    ball.SpeedY = ball.SpeedY * -1;
-    ball.SpeedX = ball.SpeedX * 1.15;
-    ball.SpeedY = ball.SpeedY * 1.15;
-    paddleP1.SpeedY = paddleP1.SpeedY * 1.15;
+    debugger;
+    ball.SpeedY *= -1;
+    paddleP1.SpeedY += +2;
+    ball.SpeedY -= 0.5;
     score = ++score;
+    if (ball.SpeedX < 0) {
+      ball.SpeedX -= 0.5;
+    } else if (ball.SpeedX > 0) {
+      ball.SpeedX += 0.5;
+    }
   }
   if (detectCollisionWallBottom(ball)) {
-    life = life - 1;
+    life -= 1;
     ball.X = canvas.width / 2 - ball.width / 2;
     ball.Y = canvas.height - 70;
-    ball.SpeedY = ball.SpeedY * -1;
+    ball.SpeedY *= -1;
   }
 }
 
@@ -176,7 +183,7 @@ export function drawLevel02() {
     requestAnimationFrame(drawLevel02);
   } else if (life > 0 && score === 10) {
     alert(`New Level unlocked!!!`);
-    setNewLevel();
+    setNewLevel(3);
   } else if (life === 0) {
     if (score < 5) {
       alert(`Game Over :(. You hit the ball.: ${score} times... meh.`);

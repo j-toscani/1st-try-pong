@@ -3,6 +3,8 @@
 
 console.log("I am loaded!");
 
+import { setNewLevel } from "../app.js";
+
 const canvas = document.querySelector("#screen");
 const ctx = canvas.getContext("2d");
 
@@ -62,7 +64,7 @@ function consequenceAfterCollisionWithSquare(square) {
 
 // Level functions and variables
 
-let life = 2;
+let life = 3;
 let score = 0;
 
 // Ball Variables
@@ -90,8 +92,8 @@ paddleP1.X = paddleP1.X - paddleP1.width / 2;
 
 // Obstacle Variables (for testing)
 const obstacle1 = {
-  height: 100,
-  width: 100,
+  height: 75,
+  width: 75,
   X: (canvas.width / 4) * 3,
   Y: canvas.height / 2
 };
@@ -100,8 +102,8 @@ obstacle1.X = obstacle1.X - obstacle1.height / 2;
 obstacle1.Y = obstacle1.Y - obstacle1.width / 2;
 
 const obstacle2 = {
-  height: 100,
-  width: 100,
+  height: 75,
+  width: 75,
   X: canvas.width / 4,
   Y: canvas.height / 2
 };
@@ -115,23 +117,28 @@ function drawBall() {
   ball.Y += ball.SpeedY;
   ctx.drawImage(ballImage, ball.X, ball.Y, ball.width, ball.height);
   if (detectCollisionWallLeft(ball) || detectCollisionWallRight(ball)) {
-    ball.SpeedX = ball.SpeedX * -1;
+    ball.SpeedX *= -1;
   }
   if (detectCollisionWallTop(ball)) {
-    ball.SpeedY = ball.SpeedY * -1;
+    ball.SpeedY *= -1;
   }
   if (detectCollisionBetween(ball, paddleP1)) {
-    ball.SpeedY = ball.SpeedY * -1;
-    ball.SpeedX = ball.SpeedX * 1.15;
-    ball.SpeedY = ball.SpeedY * 1.15;
-    paddleP1.SpeedY = paddleP1.SpeedY * 1.15;
+    debugger;
+    ball.SpeedY *= -1;
+    paddleP1.SpeedY += +2;
+    ball.SpeedY -= 0.5;
     score = ++score;
+    if (ball.SpeedX < 0) {
+      ball.SpeedX -= 0.5;
+    } else if (ball.SpeedX > 0) {
+      ball.SpeedX += 0.5;
+    }
   }
   if (detectCollisionWallBottom(ball)) {
-    life = life - 1;
+    life -= 1;
     ball.X = canvas.width / 2 - ball.width / 2;
     ball.Y = canvas.height - 70;
-    ball.SpeedY = ball.SpeedY * -1;
+    ball.SpeedY *= -1;
   }
 }
 
@@ -187,7 +194,7 @@ export function drawLevel03() {
     requestAnimationFrame(drawLevel03);
   } else if (life > 0 && score === 10) {
     alert(`New Level unlocked!!!`);
-    setNewLevel();
+    setNewLevel(4);
   } else if (life == 0) {
     if (score < 5) {
       alert(`Game Over :(. You hit the ball.: ${score} times... meh.`);
