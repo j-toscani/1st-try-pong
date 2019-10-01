@@ -14,4 +14,4 @@ export function setNewLevel(level) {
   }
 }
 
-setNewLevel(1);
+setNewLevel(2);

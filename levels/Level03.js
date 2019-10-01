@@ -92,24 +92,33 @@ paddleP1.X = paddleP1.X - paddleP1.width / 2;
 
 // Obstacle Variables (for testing)
 const obstacle1 = {
-  height: 75,
-  width: 75,
-  X: (canvas.width / 4) * 3,
+  height: 125,
+  width: 125,
+  X: 0,
   Y: canvas.height / 2
 };
 
-obstacle1.X = obstacle1.X - obstacle1.height / 2;
 obstacle1.Y = obstacle1.Y - obstacle1.width / 2;
 
 const obstacle2 = {
-  height: 75,
-  width: 75,
-  X: canvas.width / 4,
+  height: 125,
+  width: 125,
+  X: canvas.width,
   Y: canvas.height / 2
 };
 
-obstacle2.X = obstacle2.X - obstacle2.height / 2;
+obstacle2.X = obstacle2.X - obstacle2.height;
 obstacle2.Y = obstacle2.Y - obstacle2.width / 2;
+
+const obstacle3 = {
+  height: 80,
+  width: 80,
+  X: canvas.width / 2,
+  Y: canvas.height / 2
+};
+
+obstacle3.X -= obstacle3.width / 2;
+obstacle3.Y -= obstacle3.height / 2;
 
 //Ball Functions
 function drawBall() {
@@ -123,7 +132,6 @@ function drawBall() {
     ball.SpeedY *= -1;
   }
   if (detectCollisionBetween(ball, paddleP1)) {
-    debugger;
     ball.SpeedY *= -1;
     paddleP1.SpeedY += +2;
     ball.SpeedY -= 0.5;
@@ -189,6 +197,7 @@ export function drawLevel03() {
   drawBall();
   drawObstacle(obstacle1);
   drawObstacle(obstacle2);
+  drawObstacle(obstacle3);
   createUserInfo();
   if (life > 0 && score < 10) {
     requestAnimationFrame(drawLevel03);
