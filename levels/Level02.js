@@ -91,15 +91,24 @@ const paddleP1 = {
 paddleP1.X = paddleP1.X - paddleP1.width / 2;
 
 // Obstacle Variables (for testing)
-const obstacle = {
+const obstacle1 = {
   height: 80,
   width: 80,
   X: canvas.width / 2,
   Y: canvas.height / 2
 };
 
-obstacle.X = obstacle.X - obstacle.height / 2;
-obstacle.Y = obstacle.Y - obstacle.width / 2;
+obstacle1.Y -= obstacle1.height;
+
+const obstacle2 = {
+  height: 80,
+  width: 80,
+  X: canvas.width / 2,
+  Y: canvas.height / 2
+};
+
+obstacle2.X -= obstacle2.width;
+obstacle2.Y -= obstacle2.height;
 
 //Ball Functions
 function drawBall() {
@@ -177,7 +186,8 @@ export function drawLevel02() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawPaddleP1();
   drawBall();
-  drawObstacle(obstacle);
+  drawObstacle(obstacle1);
+  drawObstacle(obstacle2);
   createUserInfo();
   if (life > 0 && score < 10) {
     requestAnimationFrame(drawLevel02);
